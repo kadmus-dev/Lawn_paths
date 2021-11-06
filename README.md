@@ -71,7 +71,7 @@ python preliminary_markup/pipeline.py blend image.tif mask.tif
 ### Build shapefile
 
 ~~~python
-from map_builder.shapefile import build_shapefile
+from lawn_paths.map_builder.shapefile import build_shapefile
 
 build_shapefile(dataset_directory: str,
                 file_list: list = None,
@@ -104,7 +104,7 @@ __c_epsilon__: RDP parameter to smooth path polygon centerlines
 ### Visualize
 
 ~~~python
-from map_builder.visualize import visualize
+from lawn_paths.map_builder.visualize import visualize
 
 visualize(filename: str, output_file: str)
 ~~~
