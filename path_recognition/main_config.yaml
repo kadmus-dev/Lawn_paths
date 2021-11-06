@@ -1,0 +1,120 @@
+---
+seed: 12371
+
+block_size: 256
+
+# paths to jsons
+train_samples: "/home/jupyter/work/resources/train.json"
+val_samples: "/home/jupyter/work/resources/val.json"
+test_dir: "/home/jupyter/mnt/datasets/RawData/"
+
+# parameters for dataloaders
+num_workers: 4
+
+train_parameters:
+  batch_size: 32
+  
+val_parameters:
+  batch_size: 8
+
+test_parameters:
+  batch_size: 8
+
+# detector model
+# model:
+#   type: segmentation_models_pytorch.Unet
+#   encoder_name: xception
+# #   decoder_attention_type: scse
+#   encoder_weights: imagenet
+#   activation: sigmoid
+model:
+    type: unet_models.AttU_Net
+
+# pytorch trainer config
+trainer:
+  type: pytorch_lightning.Trainer
+  gpus: 1
+  max_epochs: 40
+  benchmark: True
+  log_every_n_steps: 100
+  num_sanity_val_steps: 2
+#   resume_from_checkpoint: "./checkpoints_xception_latest/epoch=10-val_f1=0.55453.ckpt"
+
+# checkpoint callback
+checkpoint:
+  type: pytorch_lightning.callbacks.ModelCheckpoint
+  dirpath: "./checkpoints_AttU_Net"
+  filename: "{epoch}-{val_f1:.5f}"
+  monitor: val_f1
+  verbose: True
+  mode: max
+  save_top_k: 1
+
+# logger callback
+logger:
+  type: pytorch_lightning.loggers.CSVLogger
+  save_dir: logs
+  name: AttU_Net
+
+# optimizer
+optimizer:
+  type: torch.optim.Adam
+  lr: 0.000008 # 0.001 -> 0.0002 -> 0.00004 -> 0.000008
+#   weight_decay: 0.0005
+
+# scheduler for optimizer
+scheduler:
+  lr_scheduler:
+    type: torch.optim.lr_scheduler.ReduceLROnPlateau
+    mode: min
+    factor: 0.094
+    patience: 3
+    cooldown: 1
+    verbose: True
+  lr_dict:
+    interval: epoch
+    frequency: 1
+    monitor: train_loss
+
+
+# AUGMENTATIONS
+
+train_aug:
+  transform:
+    __class_fullname__: albumentations.core.composition.Compose
+    bbox_params: null
+    keypoint_params: null
+    p: 1
+    transforms:  
+      - __class_fullname__: albumentations.augmentations.transforms.Normalize
+        always_apply: false
+        max_pixel_value: 255.0
+        mean:
+          - 0.485
+          - 0.456
+          - 0.406
+        p: 1
+        std:
+          - 0.229
+          - 0.224
+          - 0.225
+
+val_aug:
+  transform:
+    __class_fullname__: albumentations.core.composition.Compose
+    bbox_params: null
+    keypoint_params: null
+    p: 1
+    transforms:
+      - __class_fullname__: albumentations.augmentations.transforms.Normalize
+        always_apply: false
+        max_pixel_value: 255.0
+        mean:
+          - 0.485
+          - 0.456
+          - 0.406
+        p: 1
+        std:
+          - 0.229
+          - 0.224
+          - 0.225

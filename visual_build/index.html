@@ -1,0 +1,101 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="/eel.js"></script>
+</head>
+<body>
+<div class="cont">
+  <table>
+    <tr>
+      <td>
+         <a class="linkk" href="#">Визуализация</a>
+      </td>
+            <td>
+         <a class="linkk" href="about.html">О нас</a>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<br>
+<h1>Карта пеших троп Москвы</h1>
+<h3 class="subheader">Команда Kadmus</h3>
+<br>
+<p> В поле ниже введите полный путь до папки, сожержащей <a class="high"> ТОЛЬКО</a> файлы .tif и .tfw. <bR>После того, как вы казали путь, нажмите кнопку <a class="high">"Визуализировать"</a>.<br> Дождитесь загрузки, внизу появится интерактивная карта</p>
+
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<div class="form__group">
+  <input type="text" class="form__input" id="input_text" placeholder="Полный путь до папки" required="" />
+  <label for="name" class="form__label">Полный путь до папки</label>
+</div>
+
+
+<a class="neon-btn" onclick="start()" href="#">
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  Визуализировать
+</a>
+
+<br>
+
+<div class="wrapper inline" id="loader">
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="shadow"></div>
+    <div class="shadow"></div>
+    <div class="shadow"></div>
+    <span>Loading</span>
+</div>
+
+<iframe id="frame" class="inline"
+    title="Map"
+    width="1000px"
+    height="700px">
+</iframe>
+
+<br>
+<br>
+
+<script type="text/javascript">
+    
+    function chpok(id){
+       elem = document.getElementById(id);
+      elem.classList.add("act");
+      elem.classList.remove("inline");
+      elem.src = "map.html";
+    }
+    
+    async function test (inp){
+        let value = await eel.test(inp);
+        console.log("activate .py");
+    }
+
+    async function start(){
+        elem = document.getElementById("input_text");
+        console.log(elem.value);
+        await eel.test(elem.value);
+        console.log("started");
+        el = document.getElementById("loader");
+        el.classList.add("act");
+        el.classList.remove("inline");
+    }
+    
+    eel.expose(my_javascript_function);
+    function my_javascript_function(a, b) {
+        chpok("frame");
+        console.log(a + b);
+        el = document.getElementById("loader");
+        el.classList.add("inline");
+        el.classList.remove("act");
+    }
+</script>
+
+
+</body>
+</html>
+
