@@ -5,7 +5,7 @@
 
 Install from repository:
 ~~~
-pip install -e "git+https://github.com/Denikozub/kadmus-dev.git#egg=lawn_paths"
+pip install -e "git+https://github.com/Denikozub/lawn_paths.git#egg=lawn_paths"
 ~~~
 Warning: package requires GeoPandas to be installed, which can be problematic on Windows. [This](https://towardsdatascience.com/geopandas-installation-the-easy-way-for-windows-31a666b3610f/) article may help.
 
